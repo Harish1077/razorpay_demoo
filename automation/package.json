@@ -1,0 +1,23 @@
+{
+  "name": "razorpay-checkout-playwright-e2e",
+  "version": "1.0.0",
+  "description": "End-to-end Playwright TypeScript automation suite for Razorpay Standard Checkout (Card 3DS, UPI 2FA, NetBanking 2FA, Negative Validations, Network Interception, and Google Messages OTP).",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:core": "playwright test tests/01-card-2fa.spec.ts tests/02-upi-2fa.spec.ts tests/03-netbanking-2fa.spec.ts --headed",
+    "test:negative": "playwright test tests/04-negative-validations.spec.ts --headed",
+    "test:bonus": "playwright test tests/05-bonus-e2e-otp.spec.ts --headed",
+    "auth:messages": "tsx scripts/pair-google-messages.ts",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.10.0",
+    "dotenv": "^16.4.7",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

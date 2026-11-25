@@ -1,0 +1,42 @@
+name: Razorpay Playwright Automation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  e2e-validations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Typecheck TypeScript POM Suite
+        run: npm run typecheck
+
+      - name: Run QA Negative Validations & Core 2FA Flows
+        run: npx playwright test tests/04-negative-validations.spec.ts tests/02-upi-2fa.spec.ts tests/03-netbanking-2fa.spec.ts
+
+      - name: Upload Playwright Videos & Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-videos-and-report
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
